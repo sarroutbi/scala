@@ -4,6 +4,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
+import scala.util.{Failure, Success}
 
 class Board(rows: List[List[Int]] = List(
   List(-1, -1, -1),
@@ -117,8 +118,11 @@ class Board(rows: List[List[Int]] = List(
     val result = for {
       r1 <- first
       r2 <- second
-    } yield (r1 || r2)
-    Await.result(result, Duration.Inf)
+    } yield (r1, r2)
+
+    val res = Await.result(result, Duration.Inf)
+    println("Result:" + res)
+    res._1 || res._2
   }
 
   override def equals(that: Any): Boolean =
